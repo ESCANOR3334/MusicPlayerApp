@@ -149,6 +149,9 @@ const playSong = (id) => {
     titleElement.classList.add("playing-title");
   }
 
+  highlightCurrentSong(); 
+  setPlayerDisplay();
+
 };
 
 const pauseSong = () => {
@@ -165,7 +168,7 @@ const playNextSong = () => {
     const nextSong = userData?.songs[currentSongIndex + 1];
     playSong(nextSong.id);
   }
-}
+};
 
 const playPreviousSong = () => {
   if (userData?.currentSong === null) {
@@ -175,7 +178,29 @@ const playPreviousSong = () => {
     const previousSong = userData?.songs[currentSongIndex - 1];
     playSong(previousSong.id);
   }
-}
+};
+
+const setPlayerDisplay = () => {
+  const playingSong = document.getElementById('player-song-title');
+  const songArtist = document.getElementById('player-song-artist');
+  const currentTitle = userData?.currentSong?.title;
+  const currentArtist = userData?.currentSong?.artist;
+
+  playingSong.textContent = currentTitle ? currentTitle : "";
+  songArtist.textContent = currentArtist ? currentArtist : "";
+};
+
+const highlightCurrentSong = () => {
+  const playlistSongElements = document.querySelectorAll('.playlist-song');
+  const songToHighlight = document.getElementById(`song-${userData?.currentSong?.id}`);
+  playlistSongElements.forEach((songEl) => {
+    songEl.removeAttribute("aria-current");
+  });
+
+  if (songToHighlight){
+    songToHighlight.setAttribute("aria-current", "true");
+  };
+};
 
 const renderSongs = (array) => {
   const songsHTML = array
@@ -200,9 +225,14 @@ const renderSongs = (array) => {
 
 };
 
+const setPlayButtonAccessibleText = () => {
+  const song = userData?.currentSong || userData?.songs[0];
+  
+};
+
 const getCurrentSongIndex = () => {
   return userData?.songs.indexOf(userData?.currentSong)
-}
+};
 
 playButton.addEventListener("click", () => {
   if (userData?.currentSong === null){
